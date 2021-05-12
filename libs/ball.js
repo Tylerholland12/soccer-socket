@@ -1,0 +1,68 @@
+// define the ultimate functionallity of the ball that is used
+class Ball{
+    constructor(canvasWidth, canvasHeight){
+        this.location = {
+            x: canvasWidth / 2,
+            y: canvasHeight / 2
+        };
+        this.velocity = {
+            x: 0,
+            y: 0
+        };
+        this.acceleration = {
+            x: 0,
+            y: 0
+        }
+        this.r = 15;
+        this.frictionConstant = 0.05;
+        this.stopped = false;
+    }
+    
+    update() {
+        // keep track of the moving ball 
+        if(!this.stopped){
+            this.applyFriction();
+            
+            this.velocity.x += this.acceleration.x;
+            this.velocity.y += this.acceleration.y;
+            
+            this.location.x += this.velocity.x;
+            this.location.y += this.velocity.y;
+            
+            this.acceleration.x = 0;
+            this.acceleration.y = 0;
+        } else {
+            this.stopped = false;
+        }
+    }
+    
+    applyFriction() {
+        // keep track of how far it has gone and track where it should start to slow
+        let friction = {
+            x: this.velocity.x,
+            y: this.velocity.y
+        }
+        
+        friction.x *= -1 * this.frictionConstant;
+        friction.y *= -1 * this.frictionConstant;
+        
+        this.applyForce(friction);
+    }
+    
+    applyForce(force) {
+        // show how hard the ball was hit
+        this.acceleration.x += force.x;
+        this.acceleration.y += force.y;
+    }
+    
+    stopBall() {
+        // show that the ball has not been touched and should sit in place
+        this.stopped = true;
+        this.acceleration.x = 0;
+        this.acceleration.y = 0;
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+    }
+}
+
+module.exports = Ball;
